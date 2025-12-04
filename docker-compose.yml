@@ -5,7 +5,7 @@ services:
       - PUID=1000
       - PGID=1000
       - APP_URL=${APP_URL}
-      - APP_KEY=base64:oqTwlgei2EIe1ZarDgkXMl2j+xB37lbSS8HJQj1QAOk=
+      - APP_KEY=${APP_KEY}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - DB_USER=${DB_USER}
