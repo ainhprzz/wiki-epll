@@ -14,7 +14,6 @@ WORKDIR /var/www/html
 # Copia los archivos de DokuWiki
 COPY dokuwiki /var/www/html
 
-# Permisos correctos: www-www-data (no www-www-data)
 RUN chown -R www-www-data /var/www/html && \
     chmod -R 755 /var/www/html && \
     chmod -R 777 /var/www/html/data /var/www/html/conf
@@ -24,4 +23,3 @@ EXPOSE 80
 
 # Inicia Apache en foreground
 CMD ["apache2-foreground"]
-
