@@ -14,9 +14,11 @@ WORKDIR /var/www/html
 # Copia los archivos de DokuWiki
 COPY dokuwiki /var/www/html
 
-RUN chown -R www-www-data /var/www/html && \
-    chmod -R 755 /var/www/html && \
-    chmod -R 777 /var/www/html/data /var/www/html/conf
+# Permisos necesarios para que Apache pueda escribir
+RUN chown -R www-data:www-data /var/www/html && \
+chmod -R 755 /var/www/html && \
+chmod -R 777 /var/www/html/data && \
+chmod -R 777 /var/www/html/conf
 
 # Expone el puerto 80
 EXPOSE 80
