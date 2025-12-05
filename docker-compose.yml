@@ -1,5 +1,4 @@
 services:
-
   db:
     image: lscr.io/linuxserver/mariadb:latest
     container_name: bookstack_db
@@ -7,12 +6,17 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Madrid
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=rootpass_wiki
       - MYSQL_DATABASE=bookstackapp
       - MYSQL_USER=bookstack
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_PASSWORD=bookstackpass
     volumes:
       - bookstack_db_:/config
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-prootpass_wiki"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
   bookstack:
@@ -22,19 +26,20 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Madrid
-      - APP_URL=https://epll-wiki.onrender.com
-      - APP_KEY=${APP_KEY}
+      - APP_URL=https://epll-wiki.onrender.com  # ← la teva URL
+      - APP_KEY=base64:qvKO5QlOavSAk7sExIuhmzvYK2Y/ajsvdv39u63B2b8=
       - DB_HOST=db
       - DB_PORT=3306
       - DB_DATABASE=bookstackapp
       - DB_USERNAME=bookstack
-      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PASSWORD=bookstackpass
     volumes:
       - bookstack_app_:/config
     ports:
       - 6875:80
     depends_on:
-      - db
+      db:
+        condition: service_healthy  # ← AQUESTA LÍNEA CLAU
     restart: unless-stopped
 
 volumes:
